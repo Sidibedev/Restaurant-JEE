@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+	"http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.custom.i18n.resources" value="app" />
+	<package name="com.lng.actions" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="allowAccessIntercept" 
+				class="com.lng.interceptors.LoginInterceptor">
+			</interceptor>
+		</interceptors>
+		<default-action-ref name="list_Menu" />
+		
+		<action name="ajout_Menu">
+		<interceptor-ref name="createSession"/>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="allowAccessIntercept"/>
+			<result name="allowAccess">/jsp/login.jsp</result>
+			<result name="success">/jsp/ajout_Menu.jsp</result>
+		</action>
+		<action name="enregistrer_Menu" class="com.lng.actions.MenuAction" method="enregistrer">
+			<result name="success">/jsp/details_Menu.jsp</result>
+			<result name="input">/jsp/ajout_Menu.jsp</result>
+		</action>
+		<action name="list_Menu" class="com.lng.actions.MenuAction" method="lister">
+			<interceptor-ref name="createSession"/>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="allowAccessIntercept"/>
+			<result name="allowAccess">/jsp/login.jsp</result>
+			<result name="success">/jsp/list_Menu.jsp</result>
+		</action>
+		<action name="authentifier_User" class="com.lng.actions.LoginAction" method="authentifier">
+			<result name="success">/jsp/list_Menu.jsp</result>
+			<result name="input">/jsp/login.jsp</result>
+		</action>
+		<action name="deconnecter_User" class="com.lng.actions.LoginAction" method="deconnecter">
+			<result type="redirectAction">authentifier_User</result>
+		</action>
+		
+	</package>
+</struts>
